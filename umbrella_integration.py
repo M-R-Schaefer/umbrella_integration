@@ -72,7 +72,7 @@ try:
     SCIPY = True
 except ImportError as e:
     SCIPY = False
-    print "An error occurred while importing scipy.integrate, integration with Simpson's method will be disabled: {0}".format(e)
+    print("An error occurred while importing scipy.integrate, integration with Simpson's method will be disabled: {0}".format(e))
 
 try:
     from helpers.plot_data import simple_plot, create_figure,\
@@ -80,7 +80,7 @@ try:
     CAN_PLOT = True
 except ImportError as e:
     CAN_PLOT = False
-    print "An error occurred while importing helpers.plot_data, plotting will be disabled: {0}".format(e)
+    print ("An error occurred while importing helpers.plot_data, plotting will be disabled: {0}".format(e))
 
 try:
     from integration_errors.calculate_error import trapz_integrate_with_uncertainty
@@ -167,7 +167,8 @@ def run_umbrella_integration(input_files,
             logging.error('Cannot plot PMF due to import error. Please check that you have matplotlib installed.')
 
     if output_pmf_file:
-        outfile_pmf(reaction_coordinate_positions, integral, np.sqrt(integral_point_var), output_pmf_file)
+        # print(integral_point_var)
+        outfile_pmf(reaction_coordinate_positions, integral, np.sqrt(np.abs(integral_point_var)), output_pmf_file)
 
 def integrate_derivatives(bin_centers, bin_derivatives, integration_method):
 
@@ -344,6 +345,7 @@ def calculate_window_statistics(input_data, n_blocks):
         window_data['var_var_segmented'] = np.var(var_segmented, ddof=1)/float(mu_segmented.shape[0])
 
 def get_segmented_window_statistics(com_distances, block_size):
+    block_size = int(block_size)
     block_boundary_indexes = range(0, len(com_distances), block_size)
     block_means = np.zeros(len(block_boundary_indexes))
     block_vars = np.zeros(len(block_boundary_indexes))
@@ -359,7 +361,8 @@ def maximum_second_derivative_check(derivatives, bin_centers, input_data):
     ddf_ddx = np.diff(derivatives)/np.diff(bin_centers)
     kappa, bin_center = sorted(zip(ddf_ddx, bin_centers[:len(ddf_ddx)]))[0]
     # take the nearest umbrella to the bin_center to get the force constant corresponding to that second derivative
-    umbrella_eq_pos = input_data.keys()
+    umbrella_eq_pos = list(input_data.keys())
+    # print(umbrella_eq_pos)
     nearest_eq_pos = umbrella_eq_pos[(np.abs(np.array(umbrella_eq_pos)-bin_center)).argmin()]
     fc = input_data[nearest_eq_pos]["k"]
     kappa = -kappa
