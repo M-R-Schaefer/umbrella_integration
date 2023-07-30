@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "umbrella-integration"
+version = "0.1.0"
+description = "Python implementation of the umbrella integration method for potential of mean force (PMF) calculations"
+authors = ["Moritz R. Schäfer <schaefer@theochem.uni-stuttgart.de>"]
+license = "GPL3"
+readme = "README.md"
+packages = [{include = "umbrella_integration"}]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.13"
+numpy = "^1.25.1"
+matplotlib = "^3.7.2"
+scipy = "^1.11.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+isort = "^5.12.0"
+
+[tool.poetry.scripts]
+umbrella-integration = "umbrella_integration.ui:main"
+ui-format-input-data = "umbrella_integration.format_input_data:run_umbrella_integration"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
