@@ -72,7 +72,7 @@ try:
     SCIPY = True
 except ImportError as e:
     SCIPY = False
-    print "An error occurred while importing scipy.integrate, integration with Simpson's method will be disabled: {0}".format(e)
+    print("An error occurred while importing scipy.integrate, integration with Simpson's method will be disabled: {0}".format(e))
 
 try:
     from helpers.plot_data import simple_plot, create_figure,\
@@ -80,7 +80,7 @@ try:
     CAN_PLOT = True
 except ImportError as e:
     CAN_PLOT = False
-    print "An error occurred while importing helpers.plot_data, plotting will be disabled: {0}".format(e)
+    print("An error occurred while importing helpers.plot_data, plotting will be disabled: {0}".format(e))
 
 try:
     from integration_errors.calculate_error import trapz_integrate_with_uncertainty
@@ -100,7 +100,7 @@ INTEGRATION_ERROR_METHODS = ("Kaestner", "trapz_analysis")
 N_BLOCKS_LOWER_LIMIT = 24 # segments
 MINIMUM_BLOCK_SIZE = 100 # frames
 
-logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s]: %(message)s')
+logging.basicConfig(level=logging.INFO, format='[%(levelname)s]: %(message)s')
 
 def run_umbrella_integration(input_files,
     temperature,
@@ -129,10 +129,7 @@ def run_umbrella_integration(input_files,
     window_separation_distance_check(input_data, temperature)
 
     if position_histogram_plot:
-        if CAN_PLOT:
-            generate_window_distributions(input_data, position_histogram_plot)
-        else:
-            logging.error('Cannot plot histogram due to import error. Please check that you have matplotlib installed.')
+        generate_window_distributions(input_data, position_histogram_plot)
     calculate_window_statistics(input_data, n_blocks)
 
     # bin the derivatives (ie combine derivatives from all windows for calculation of final pmf by integration)
@@ -331,7 +328,7 @@ def var_delta_A(var_derivatives, xis, mu_sigma_windows):
 
 def calculate_window_statistics(input_data, n_blocks):
     for _, window_data in sorted(input_data.items()):
-        block_size = len(window_data["com"])/n_blocks
+        block_size = int(len(window_data["com"])/n_blocks)
         if block_size < MINIMUM_BLOCK_SIZE:
             logging.warning("The number of frames in each block {0} is below the recommended minimum of {1}".format(block_size, MINIMUM_BLOCK_SIZE))
         # calculate mean and standard deviation for segments of window (based on block size from convergence analysis)
@@ -359,8 +356,8 @@ def maximum_second_derivative_check(derivatives, bin_centers, input_data):
     ddf_ddx = np.diff(derivatives)/np.diff(bin_centers)
     kappa, bin_center = sorted(zip(ddf_ddx, bin_centers[:len(ddf_ddx)]))[0]
     # take the nearest umbrella to the bin_center to get the force constant corresponding to that second derivative
-    umbrella_eq_pos = input_data.keys()
-    nearest_eq_pos = umbrella_eq_pos[(np.abs(np.array(umbrella_eq_pos)-bin_center)).argmin()]
+    umbrella_eq_pos = np.array(list(input_data.keys()))
+    nearest_eq_pos = umbrella_eq_pos[(np.abs(umbrella_eq_pos-bin_center)).argmin()]
     fc = input_data[nearest_eq_pos]["k"]
     kappa = -kappa
     if fc < 6*kappa:
@@ -386,16 +383,16 @@ def window_separation_distance_check(data, temperature):
                 "Johannes Kaestner and Walter Thiel 2006 (DOI: 10.1063/1.2206775)".format(window_delta, window_size_cutoff)
             if warn_msg not in displayed_messages:
                 logging.warning(warn_msg)
-                logging.debug("Foce constant was: {0:.3g} kJ mol^-1 distance^-2".format(max_fc))
-                logging.debug("Umbrella equilibrium points used: {0} - {1}".format(window_centers[i], window_centers[i+1]))
+                logging.info("Force constant was: {0:.3g} kJ mol^-1 distance^-2".format(max_fc))
+                logging.info("Umbrella equilibrium points used: {0} - {1}".format(window_centers[i], window_centers[i+1]))
                 displayed_messages.append(warn_msg)
         else:
             info_msg = "Distance between umbrellas {0} is within the recommended cutoff of 3/sqrt(BETA*K_fc) = {1:.3g}: "\
                 "Johannes Kaestner and Walter Thiel 2006 (DOI: 10.1063/1.2206775)".format(window_delta, window_size_cutoff)
             if info_msg not in displayed_messages:
                 logging.info(info_msg)
-                logging.debug("\tFoce constant was: {0:.3g} kJ mol^-1 distance^-2".format(max_fc))
-                logging.debug("\tUmbrella equilibrium points used: {0} - {1}".format(window_centers[i], window_centers[i+1]))
+                logging.info("\tForce constant was: {0:.3g} kJ mol^-1 distance^-2".format(max_fc))
+                logging.info("\tUmbrella equilibrium points used: {0} - {1}".format(window_centers[i], window_centers[i+1]))
                 displayed_messages.append(info_msg)
 
 # -------- INPUT / OUTPUT ROUTINES-----------

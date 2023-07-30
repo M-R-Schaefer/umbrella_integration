@@ -59,7 +59,7 @@ def parse_input_file(input_file, keep_every=1):
     lines = fh.read().splitlines()
     #print "Parsing file, keeping every {0}(st/nd/rd/th) value".format(keep_every)
     line_iterator = itertools.islice(lines, None, None, keep_every)
-    lines = np.array([map(float, l.split()[:2]) for l in line_iterator if l.strip()[0] not in SKIP_LINE_CHARACTERS])
+    lines = np.array([l.split()[:2] for l in line_iterator if l.strip()[0] not in SKIP_LINE_CHARACTERS], dtype=np.float64)
     fh.close()
     return lines.T
 
