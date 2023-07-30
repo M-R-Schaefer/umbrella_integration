@@ -100,7 +100,7 @@ INTEGRATION_ERROR_METHODS = ("Kaestner", "trapz_analysis")
 N_BLOCKS_LOWER_LIMIT = 24 # segments
 MINIMUM_BLOCK_SIZE = 100 # frames
 
-logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s]: %(message)s')
+logging.basicConfig(level=logging.INFO, format='[%(levelname)s]: %(message)s')
 
 def run_umbrella_integration(input_files,
     temperature,
@@ -167,7 +167,6 @@ def run_umbrella_integration(input_files,
             logging.error('Cannot plot PMF due to import error. Please check that you have matplotlib installed.')
 
     if output_pmf_file:
-        # print(integral_point_var)
         outfile_pmf(reaction_coordinate_positions, integral, np.sqrt(np.abs(integral_point_var)), output_pmf_file)
 
 def integrate_derivatives(bin_centers, bin_derivatives, integration_method):

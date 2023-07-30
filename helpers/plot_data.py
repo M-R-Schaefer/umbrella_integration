@@ -15,8 +15,8 @@ LINE_WIDTH = 1.25 # table borders and ticks
 MARKER_SIZE = 5
 
 FONT_PARAMS = dict(
-    family='serif',
-    serif='Times New Roman',
+    # family='serif',
+    # serif='Times New Roman',
     size=12,
     )
 x_label_size_increase = 4
