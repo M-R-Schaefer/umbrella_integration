@@ -1,22 +1,16 @@
 import numpy as np
 import matplotlib
-matplotlib.use("Agg")
-try:
-    from scipy.stats.kde import gaussian_kde
-    CAN_PLOT_KDE = True
-except ImportError:
-    print "KDE will be omitted from window distribution plot due to missing scipy library."
-    CAN_PLOT_KDE = False
 
-import pylab
-matplotlib.rc("mathtext", fontset="stix")
+from scipy.stats.kde import gaussian_kde
+CAN_PLOT_KDE = True
+
+import matplotlib.pyplot as plt
+
 
 LINE_WIDTH = 1.25 # table borders and ticks
 MARKER_SIZE = 5
 
 FONT_PARAMS = dict(
-    family='serif',
-    serif='Times New Roman',
     size=12,
     )
 x_label_size_increase = 4
@@ -26,8 +20,7 @@ matplotlib.rc('font', **FONT_PARAMS)
 matplotlib.rc('axes', linewidth=LINE_WIDTH)
 
 def create_figure(figsize=(5,4)):
-    fig = matplotlib.pyplot.figure(figsize=figsize)
-    fig.hold = True
+    fig = plt.figure(figsize=figsize)
     return fig
 
 def add_axis_to_figure(fig, subplot_layout=111, sharex=None, sharey=None):
@@ -59,21 +52,20 @@ def plot_hist_to_axis(ax, centers, his, kde=None):
     plot_with_kde(ax, centers, his, show=False, kde=kde)
 
 def finalise_figure(fig, ax, xlabel, ylabel, fig_name=None, show=False):
-    pylab.ylabel(ylabel, fontsize=FONT_PARAMS["size"] + y_label_size_increase)
-    pylab.xlabel(xlabel, fontsize=FONT_PARAMS["size"] + x_label_size_increase)
-    pylab.xticks(fontsize=FONT_PARAMS["size"])
-    pylab.yticks(fontsize=FONT_PARAMS["size"])
+    plt.ylabel(ylabel, fontsize=FONT_PARAMS["size"] + y_label_size_increase)
+    plt.xlabel(xlabel, fontsize=FONT_PARAMS["size"] + x_label_size_increase)
+    plt.xticks(fontsize=FONT_PARAMS["size"])
+    plt.yticks(fontsize=FONT_PARAMS["size"])
 
-    [i.set_linewidth(LINE_WIDTH) for i in ax.spines.itervalues()]
+    [i.set_linewidth(LINE_WIDTH) for k, i in ax.spines.items()] # .itervalues()
     fig.tight_layout()
     if fig_name:
         save_figure(fig, fig_name)
     if show:
-        pylab.show()
-    matplotlib.pyplot.close(fig)
+        plt.show()
 
 def generate_histogram(values, n_bins=50):
-    his, bins = np.histogram(values, bins=n_bins, normed=True)
+    his, bins = np.histogram(values, bins=n_bins, density=True)
     centers = (bins[:-1]+bins[1:])/2
     kde = gaussian_kde(values) if CAN_PLOT_KDE else None
     return centers, his, kde
