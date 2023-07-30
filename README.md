@@ -1,3 +1,9 @@
+This is a fork of the `umbrella_integration` package with the goal to update it to Python 3.X.
+I do not intend to add features to it, just to make it usable in a modern python environment.
+
+This fork is not an official Kästner group endeavor.
+
+
 -----------------------------------
 Umbrella integration
 -----------------------------------
@@ -54,23 +60,22 @@ other restraining potentials should be relatively simple.
 Currently only kJ/mol is supported, however it will not be difficult to extend this if required.
 
 ---------------------
-Requirements
+Installation
 ----------------------
 
-    Python 2.7 or Python 2.6
-    numpy
+You can install `umbrella_integration` by running one of the commands below
 
----------------------
-Optional
-----------------------
+```bash
+pip install git+https://github.com/M-R-Schaefer/umbrella_integration
 
-    matplotlib (show plots)
-    scipy (Simpson's integration method, plot histogram kde's)
+# to add it as a dependency to your project
+poetry add git+https://github.com/M-R-Schaefer/umbrella_integration
+```
 
 --------------------
 Running the program
 --------------------
-E.g. python umbrella_integration.py -i input_file -t 298.15
+E.g. umbrella-integration -i input_file -t 298.15
 Other input parameters include:
 
      -i input_file (required)
