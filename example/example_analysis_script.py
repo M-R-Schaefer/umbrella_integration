@@ -2,9 +2,9 @@
 import sys
 import glob
 from os.path import basename, dirname, abspath
-sys.path.append(dirname(dirname(abspath(__file__))))
+# sys.path.append(dirname(dirname(abspath(__file__))))
 
-from format_input_data import generate_ui_input_lines_merged, write_output_file
+from umbrella_integration.umbrella_integration.format_input_data import generate_ui_input_lines_merged, write_output_file
 from umbrella_integration import run_umbrella_integration
 
 # example of the generation of merged ui input file

@@ -12,7 +12,7 @@ import gzip
 import itertools
 import logging
 
-logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s]: %(message)s')
+logging.basicConfig(level=logging.INFO, format='[%(levelname)s]: %(message)s')
 
 SKIP_LINE_CHARACTERS = ["#", "@"]
 UI_INPUT_FILE_HEADER = "#  time  position  equilibrium_position  force_constant(kJ mol^-1 distance^-2)"

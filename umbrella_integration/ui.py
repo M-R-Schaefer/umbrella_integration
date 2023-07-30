@@ -65,7 +65,7 @@ import argparse
 from functools import partial
 import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
     from scipy.integrate import simps
@@ -75,7 +75,7 @@ except ImportError as e:
     print("An error occurred while importing scipy.integrate, integration with Simpson's method will be disabled: {0}".format(e))
 
 try:
-    from helpers.plot_data import simple_plot, create_figure,\
+    from umbrella_integration.helpers.plot_data import simple_plot, create_figure,\
         add_axis_to_figure, finalise_figure, generate_histogram, plot_with_kde
     CAN_PLOT = True
 except ImportError as e:
@@ -512,7 +512,7 @@ def parse_commandline():
         args.integration_error_method,
         )
 
-if __name__=="__main__":
+def main():
     (input_files,
     temperature,
     bin_width,
@@ -544,3 +544,7 @@ if __name__=="__main__":
         integration_method=integration_method,
         integration_error_method=integration_error_method,
         )
+
+
+if __name__=="__main__":
+    main()
